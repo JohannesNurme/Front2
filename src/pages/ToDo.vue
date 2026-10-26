@@ -1,20 +1,16 @@
 <script setup>
 import { computed, ref } from 'vue';
 import ItemList from '../components/ItemList.vue';
-let i = 0;
-let items = ref([
-  {id:i++, text:'Piim', isDone: false, importance: 'low'},
-  {id:i++, text:'Viin', isDone: true, importance: 'high'},
-  {id:i++, text:'Sai', isDone: false, importance: 'medium'},
-  {id:i++, text:'Mac', isDone: true, importance: 'high'},
-]);
+import { items } from '../items.js';
+
+let nextItemId = items.value.reduce((nextId, item) => Math.max(nextId, item.id + 1), 0);
 let newItem = ref('');
 let newImportance = ref('medium');
 
 function add(){
   if(newItem.value.trim() !== '') {
     items.value.push({
-      id:i++,
+      id: nextItemId++,
       text: newItem.value.trim(),
       isDone: false,
       importance: newImportance.value,
@@ -45,7 +41,7 @@ let toDoItems = computed(() =>
   <div class="container content mt-3">
     <div class="field has-addons">
         <div class="control is-expanded">
-            <input @keydown.enter="add" v-model="newItem" class="input" type="text" placeholder="Find a repository">
+            <input @keydown.enter="add" v-model="newItem" class="input" type="text" placeholder="New item">
         </div>
         <div class="control">
             <div class="select">
